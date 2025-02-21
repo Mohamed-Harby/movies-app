@@ -1,0 +1,32 @@
+<div class="user-dashboard">
+  <h2>Movies Collection</h2>
+
+  <div class="movies-grid">
+    <div *ngFor="let movie of movies" class="movie-card" (click)="viewMovieDetails(movie)">
+      <img [src]="movie.posterUrl" [alt]="movie.title">
+      <h3>{{ movie.title }}</h3>
+      <p>{{ movie.year }}</p>
+    </div>
+  </div>
+
+  <!-- Movie Details Modal -->
+  <div *ngIf="selectedMovie" class="movie-details-modal">
+    <div class="modal-content">
+      <button class="close-btn" (click)="closeDetails()">&times;</button>
+      
+      <div class="movie-details">
+        <img [src]="selectedMovie.posterUrl" [alt]="selectedMovie.title">
+        <div class="details-text">
+          <h2>{{ selectedMovie.title }}</h2>
+          <p class="year">{{ selectedMovie.year }}</p>
+          <p class="director"><strong>Director:</strong> {{ selectedMovie.director }}</p>
+          <p class="genre"><strong>Genre:</strong> {{ selectedMovie.genre }}</p>
+          <p class="plot">{{ selectedMovie.plot }}</p>
+          <div class="rating">
+            <strong>Rating:</strong> {{ selectedMovie.rating }}/10
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

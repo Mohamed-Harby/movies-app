@@ -1,0 +1,81 @@
+.admin-dashboard {
+  padding: 20px;
+
+  .search-section {
+    margin-bottom: 20px;
+    
+    input {
+      padding: 8px;
+      margin-right: 10px;
+      width: 300px;
+    }
+    
+    button {
+      padding: 8px 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+  }
+
+  .movies-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+
+    .movie-item {
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 8px;
+      
+      .movie-info {
+        margin-bottom: 15px;
+        
+        h3 {
+          margin: 0 0 10px 0;
+        }
+        
+        p {
+          margin: 0;
+          color: #666;
+        }
+      }
+      
+      .movie-actions {
+        display: flex;
+        gap: 10px;
+        
+        button {
+          padding: 6px 12px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          
+          &:first-child {
+            background-color: #28a745;
+            color: white;
+            
+            &:hover {
+              background-color: #218838;
+            }
+          }
+          
+          &.remove-btn {
+            background-color: #dc3545;
+            color: white;
+            
+            &:hover {
+              background-color: #c82333;
+            }
+          }
+        }
+      }
+    }
+  }
+}

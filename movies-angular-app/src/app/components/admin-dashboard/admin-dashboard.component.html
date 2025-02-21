@@ -1,0 +1,21 @@
+<div class="admin-dashboard">
+  <h2>Admin Dashboard</h2>
+  
+  <div class="search-section">
+    <input type="text" [(ngModel)]="searchQuery" placeholder="Search movies...">
+    <button (click)="searchMovies()">Search</button>
+  </div>
+
+  <div class="movies-list">
+    <div *ngFor="let movie of movies" class="movie-item">
+      <div class="movie-info">
+        <h3>{{ movie.title }}</h3>
+        <p>{{ movie.description }}</p>
+      </div>
+      <div class="movie-actions">
+        <button (click)="addMovie(movie)">Add to Collection</button>
+        <button (click)="removeMovie(movie.id)" class="remove-btn">Remove</button>
+      </div>
+    </div>
+  </div>
+</div>
