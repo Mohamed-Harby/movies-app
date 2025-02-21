@@ -1,0 +1,43 @@
+spring:
+  application:
+    name:
+      movies
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/movies?createDatabaseIfNotExist=true
+    username: mohamed-harby
+    password: MySql12Password@
+
+  redis:
+    host: localhost
+    port: 6379
+  cache:
+    type: redis
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger
+    operations-sorter: method
+    tags-sorter: alpha
+  show-actuator: false
+
+omdb:
+  api:
+    url: https://www.omdbapi.com/
+    key: 4fa163b9
+
+
+security:
+  jwt:
+    secret-key: 9fc002aebef0b7868c5ac59f07bc4e37e0c03afef3ce03c6cd98840026e814b3
+    expiration-time: 604800000 # 1 week in millisecond
