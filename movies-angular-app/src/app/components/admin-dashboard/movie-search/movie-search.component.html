@@ -1,0 +1,138 @@
+<div class="movie-search">
+  <header class="movie-search__header">
+    <h2>Search Movies</h2>
+    <div class="search-form">
+      <!-- Search Input -->
+      <div class="search-form__group">
+        <input 
+          type="text" 
+          class="search-form__input" 
+          [(ngModel)]="searchQuery"
+          (keyup.enter)="onSearch()"
+          placeholder="Search for movies..."
+        >
+      </div>
+
+      <!-- Type Filter -->
+      <div class="search-form__group">
+        <select 
+          class="search-form__select" 
+          [(ngModel)]="selectedType"
+        >
+          <option value="">All Types</option>
+          <option *ngFor="let type of typeOptions" [value]="type">
+            {{ type | titlecase }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Year Filter -->
+      <div class="search-form__group">
+        <select 
+          class="search-form__select" 
+          [(ngModel)]="selectedYear"
+        >
+          <option value="">All Years</option>
+          <option *ngFor="let year of yearOptions" [value]="year">
+            {{ year }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="search-form__actions">
+        <button 
+          class="search-form__button search-form__button--clear" 
+          (click)="clearFilters()"
+          [disabled]="!selectedType && !selectedYear"
+        >
+          Clear Filters
+        </button>
+        <button 
+          class="search-form__button search-form__button--search" 
+          (click)="onSearch()"
+        >
+          Search
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Loading State -->
+  <div class="loading-spinner" *ngIf="loading">
+    <div class="loading-spinner__circle"></div>
+  </div>
+
+  <!-- Error Message -->
+  <div class="error-message" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <!-- Search Results -->
+  <div class="search-results" *ngIf="searchResults.length > 0">
+    <div class="search-results__header">
+      <h3>Found {{ totalResults }} results</h3>
+    </div>
+    
+    <div class="search-results__grid">
+      <div class="movie-card" *ngFor="let movie of searchResults">
+        <div class="movie-card__image">
+          <img [src]="movie.Poster" [alt]="movie.Title" *ngIf="movie.Poster !== 'N/A'">
+          <div class="movie-card__no-poster" *ngIf="movie.Poster === 'N/A'">
+            No Poster Available
+          </div>
+        </div>
+        <div class="movie-card__content">
+          <h3 class="movie-card__title">{{ movie.Title }}</h3>
+          <div class="movie-card__info">
+            <span class="movie-card__year">{{ movie.Year }}</span>
+            <span class="movie-card__type">{{ movie.Type }}</span>
+          </div>
+          <div class="movie-card__actions">
+            <button 
+              *ngIf="!movie.added"
+              class="movie-card__button" 
+              (click)="addMovie(movie.imdbID)"
+              [disabled]="movie.isAdding"
+            >
+              <ng-container *ngIf="!movie.isAdding">Add Movie</ng-container>
+              <div class="button-spinner" *ngIf="movie.isAdding"></div>
+            </button>
+            <button 
+              *ngIf="movie.added"
+              class="movie-card__button movie-card__button--added" 
+              disabled
+            >
+              Added
+            </button>
+            <button 
+              *ngIf="movie.added"
+              class="movie-card__button movie-card__button--danger" 
+              (click)="removeMovie(movie.imdbID)"
+              [disabled]="movie.isAdding"
+            >
+              <ng-container *ngIf="!movie.isAdding">Remove</ng-container>
+              <div class="button-spinner" *ngIf="movie.isAdding"></div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Load More Button -->
+    <div class="search-results__footer" *ngIf="hasMorePages">
+      <button 
+        class="load-more-button" 
+        (click)="loadMore()"
+        [disabled]="loading"
+      >
+        {{ loading ? 'Loading...' : 'Load More' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- No Results -->
+  <div class="no-results" *ngIf="searchResults.length === 0 && !loading && searchQuery">
+    <p>No movies found matching your search.</p>
+  </div>
+</div>

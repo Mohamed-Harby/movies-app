@@ -1,81 +1,270 @@
-.admin-dashboard {
-  padding: 20px;
+// Variables
+$primary-color: #2c3e50;
+$secondary-color: #3498db;
+$danger-color: #e74c3c;
+$background-color: #f8f9fa;
+$text-color: #2c3e50;
+$border-radius: 8px;
+$transition-duration: 0.3s;
+$box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-  .search-section {
-    margin-bottom: 20px;
+.admin-dashboard {
+  padding: 2rem;
+
+  &__header {
+    margin-bottom: 2rem;
     
-    input {
-      padding: 8px;
-      margin-right: 10px;
-      width: 300px;
+    h1 {
+      font-size: 2rem;
+      color: $primary-color;
     }
-    
-    button {
-      padding: 8px 16px;
-      background-color: #007bff;
+  }
+}
+
+// Tabs
+.tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid rgba($primary-color, 0.1);
+  padding-bottom: 1rem;
+
+  &__button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    background: none;
+    font-size: 1rem;
+    color: $primary-color;
+    cursor: pointer;
+    transition: all $transition-duration ease;
+    border-radius: $border-radius;
+
+    &:hover {
+      background-color: rgba($primary-color, 0.1);
+    }
+
+    &--active {
+      background-color: $primary-color;
       color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      
+
       &:hover {
-        background-color: #0056b3;
+        background-color: darken($primary-color, 10%);
       }
     }
   }
+}
 
-  .movies-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+// Search Form
+.search-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: $border-radius;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-    .movie-item {
-      border: 1px solid #ddd;
-      padding: 15px;
-      border-radius: 8px;
-      
-      .movie-info {
-        margin-bottom: 15px;
-        
-        h3 {
-          margin: 0 0 10px 0;
-        }
-        
-        p {
-          margin: 0;
-          color: #666;
-        }
+  &__group {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  &__input,
+  &__select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 2px solid rgba($primary-color, 0.1);
+    border-radius: $border-radius;
+    font-size: 1rem;
+    transition: all $transition-duration ease;
+    
+    &:focus {
+      outline: none;
+      border-color: $secondary-color;
+      box-shadow: 0 0 0 3px rgba($secondary-color, 0.1);
+    }
+  }
+
+  &__select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+    padding-right: 2.5rem;
+  }
+
+  &__button {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: none;
+    border-radius: $border-radius;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all $transition-duration ease;
+
+    &--clear {
+      background-color: rgba($primary-color, 0.1);
+      color: $primary-color;
+
+      &:hover:not(:disabled) {
+        background-color: rgba($primary-color, 0.2);
       }
-      
-      .movie-actions {
-        display: flex;
-        gap: 10px;
-        
-        button {
-          padding: 6px 12px;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-          
-          &:first-child {
-            background-color: #28a745;
-            color: white;
-            
-            &:hover {
-              background-color: #218838;
-            }
-          }
-          
-          &.remove-btn {
-            background-color: #dc3545;
-            color: white;
-            
-            &:hover {
-              background-color: #c82333;
-            }
-          }
-        }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
       }
     }
+  }
+}
+
+// Movie Grid
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+// Movie Card
+.movie-card {
+  background-color: white;
+  border-radius: $border-radius;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform $transition-duration ease;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+
+  &__image {
+    position: relative;
+    padding-top: 150%;
+    background-color: rgba($primary-color, 0.1);
+
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  &__no-poster {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba($primary-color, 0.5);
+    text-align: center;
+  }
+
+  &__content {
+    padding: 1.5rem;
+  }
+
+  &__title {
+    margin: 0 0 0.5rem;
+    font-size: 1.2rem;
+    color: $primary-color;
+  }
+
+  &__info {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: rgba($primary-color, 0.7);
+  }
+
+  &__plot {
+    margin: 0 0 1rem;
+    font-size: 0.9rem;
+    color: rgba($primary-color, 0.7);
+    line-height: 1.5;
+  }
+
+  &__button {
+    width: 100%;
+    padding: 0.8rem;
+    border: none;
+    border-radius: $border-radius;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all $transition-duration ease;
+
+    &--danger {
+      background-color: $danger-color;
+      color: white;
+
+      &:hover {
+        background-color: darken($danger-color, 10%);
+      }
+    }
+  }
+}
+
+// Loading Spinner
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+
+  &__circle {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba($secondary-color, 0.3);
+    border-top-color: $secondary-color;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+// Error Message
+.error-message {
+  padding: 1rem;
+  margin: 1rem 0;
+  background-color: rgba($danger-color, 0.1);
+  color: $danger-color;
+  border-radius: $border-radius;
+  text-align: center;
+}
+
+// No Content Message
+.no-content {
+  text-align: center;
+  padding: 3rem;
+  color: rgba($primary-color, 0.7);
+  background-color: white;
+  border-radius: $border-radius;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .admin-dashboard {
+    padding: 1rem;
+  }
+
+  .search-form {
+    flex-direction: column;
+
+    &__group {
+      width: 100%;
+    }
+  }
+
+  .movie-grid {
+    grid-template-columns: 1fr;
   }
 }

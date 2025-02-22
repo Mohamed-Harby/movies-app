@@ -1,35 +1,54 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { map, switchMap } from 'rxjs/operators';
+import { Movie, MovieSearchResponse } from '../interfaces/movie.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MovieService {
-  private apiUrl = `${environment.apiUrl}/movies`;
+  private baseUrl = 'http://localhost:8080';
+  private moviesUrl = `${this.baseUrl}/movies/`;
+  private proxyUrl = `${this.baseUrl}/proxy/movies/`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Admin functions
-  searchMovies(query: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/search`, { params: { query } });
+  searchMovies(params: {
+    title: string;
+    type?: 'movie' | 'series' | 'episode';
+    year?: string;
+    page?: number;
+  }): Observable<MovieSearchResponse> {
+    return this.http.get<MovieSearchResponse>(`${this.proxyUrl}search`, { params: params as any });
   }
 
-  addMovie(movie: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}`, movie);
+  getMovieByImdbId(imdbId: string): Observable<Movie> {
+    return this.http.get<Movie>(`${this.proxyUrl}${imdbId}`);
+  }
+
+  addMovie(imdbId: string): Observable<Movie> {
+    return this.getMovieByImdbId(imdbId).pipe(
+      map(movieDetails => ({
+        ...movieDetails,
+        imdbId: imdbId,
+        type: movieDetails.type?.toLowerCase() as 'movie' | 'series' | 'episode'
+      })),
+      switchMap(movie => this.http.post<Movie>(this.moviesUrl, movie))
+    );
   }
 
   removeMovie(movieId: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${movieId}`);
+    return this.http.delete<void>(`${this.moviesUrl}${movieId}`);
   }
 
   // User functions
-  getAllMovies(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}`);
+  getAllMovies(): Observable<Movie[]> {
+    return this.http.get<Movie[]>(this.moviesUrl);
   }
 
-  getMovieDetails(movieId: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${movieId}`);
+  getMovieDetails(movieId: string): Observable<Movie> {
+    return this.http.get<Movie>(`${this.moviesUrl}${movieId}`);
   }
 }

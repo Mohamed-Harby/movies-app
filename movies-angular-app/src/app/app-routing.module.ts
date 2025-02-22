@@ -7,14 +7,15 @@ import { AdminDashboardComponent } from './components/admin-dashboard/admin-dash
 import { UserDashboardComponent } from './components/user-dashboard/user-dashboard.component';
 
 const routes: Routes = [
-    { path: 'login', component: LoginComponent },
-    { path: 'admin', component: AdminDashboardComponent, canActivate: [AuthGuard, AdminGuard] },
-    { path: 'dashboard', component: UserDashboardComponent, canActivate: [AuthGuard] },
-    { path: '', redirectTo: '/login', pathMatch: 'full' }
+  { path: 'login', component: LoginComponent },
+  { path: 'admin', component: AdminDashboardComponent, canActivate: [AuthGuard, AdminGuard] },
+  { path: 'movies', component: UserDashboardComponent, canActivate: [AuthGuard] },
+  { path: 'movies/:id', component: UserDashboardComponent, canActivate: [AuthGuard] },
+  { path: '', redirectTo: '/movies', pathMatch: 'full' }
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
 export class AppRoutingModule { }

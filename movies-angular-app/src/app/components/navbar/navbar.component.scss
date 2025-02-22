@@ -1,0 +1,95 @@
+// Variables
+$navbar-bg: #2c3e50;
+$navbar-text: #ecf0f1;
+$navbar-hover: #3498db;
+$transition-duration: 0.3s;
+
+.navbar {
+  background-color: $navbar-bg;
+  padding: 1rem 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__brand {
+    color: $navbar-text;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color $transition-duration ease;
+
+    &:hover {
+      color: $navbar-hover;
+    }
+  }
+
+  &__menu {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  &__link {
+    color: $navbar-text;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: all $transition-duration ease;
+
+    &:hover {
+      color: $navbar-hover;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    &--active {
+      color: $navbar-hover;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  &__button {
+    background-color: transparent;
+    border: 2px solid $navbar-text;
+    color: $navbar-text;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all $transition-duration ease;
+
+    &:hover {
+      background-color: $navbar-text;
+      color: $navbar-bg;
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .navbar {
+    &__container {
+      padding: 0 1rem;
+    }
+
+    &__menu {
+      gap: 1rem;
+    }
+
+    &__link {
+      padding: 0.5rem;
+    }
+  }
+}

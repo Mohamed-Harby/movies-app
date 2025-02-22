@@ -1,32 +1,86 @@
-<div class="user-dashboard">
-  <h2>Movies Collection</h2>
+<div class="dashboard">
+  <header class="dashboard__header">
+    <h1 class="dashboard__title">Movie Collection</h1>
+    <div class="search-bar">
+      <input 
+        type="text" 
+        class="search-bar__input" 
+        placeholder="Search movies..." 
+        [(ngModel)]="searchQuery"
+        (input)="onSearch()"
+      >
+      <button class="search-bar__clear" *ngIf="searchQuery" (click)="clearSearch()">×</button>
+    </div>
+  </header>
 
-  <div class="movies-grid">
-    <div *ngFor="let movie of movies" class="movie-card" (click)="viewMovieDetails(movie)">
-      <img [src]="movie.posterUrl" [alt]="movie.title">
-      <h3>{{ movie.title }}</h3>
-      <p>{{ movie.year }}</p>
+  <!-- Loading Spinner -->
+  <div class="loading-spinner" *ngIf="loading">
+    <div class="loading-spinner__circle"></div>
+  </div>
+
+  <!-- Error Message -->
+  <div class="error-message" *ngIf="error">
+    <p>{{ error }}</p>
+    <button class="error-message__close" (click)="error = ''">×</button>
+  </div>
+
+  <!-- Movie Grid -->
+  <div class="movie-grid">
+    <div class="movie-card" *ngFor="let movie of filteredMovies">
+      <div class="movie-card__image">
+        <img [src]="movie.poster" [alt]="movie.title" *ngIf="movie.poster">
+      </div>
+      <div class="movie-card__content">
+        <h2 class="movie-card__title">{{ movie.title }}</h2>
+        <p class="movie-card__year">{{ movie.year }}</p>
+        <button class="movie-card__button" (click)="viewMovieDetails(movie.id?.toString() || '')">
+          View Details
+        </button>
+      </div>
     </div>
   </div>
 
+  <!-- No Results Message -->
+  <div class="no-results" *ngIf="filteredMovies.length === 0 && !loading">
+    <p>No movies found matching your search.</p>
+  </div>
+
   <!-- Movie Details Modal -->
-  <div *ngIf="selectedMovie" class="movie-details-modal">
-    <div class="modal-content">
-      <button class="close-btn" (click)="closeDetails()">&times;</button>
+  <div class="modal" [class.modal--open]="selectedMovie" *ngIf="selectedMovie">
+    <div class="modal__content">
+      <header class="modal__header">
+        <h2 class="modal__title">{{ selectedMovie.title }}</h2>
+        <button class="modal__close" (click)="closeDetails()">×</button>
+      </header>
       
-      <div class="movie-details">
-        <img [src]="selectedMovie.posterUrl" [alt]="selectedMovie.title">
-        <div class="details-text">
-          <h2>{{ selectedMovie.title }}</h2>
-          <p class="year">{{ selectedMovie.year }}</p>
-          <p class="director"><strong>Director:</strong> {{ selectedMovie.director }}</p>
-          <p class="genre"><strong>Genre:</strong> {{ selectedMovie.genre }}</p>
-          <p class="plot">{{ selectedMovie.plot }}</p>
-          <div class="rating">
-            <strong>Rating:</strong> {{ selectedMovie.rating }}/10
+      <div class="modal__body">
+        <div class="movie-details">
+          <div class="movie-details__poster">
+            <img [src]="selectedMovie.poster" [alt]="selectedMovie.title" *ngIf="selectedMovie.poster" class="img-fluid rounded shadow-sm">
+          </div>
+          <div class="movie-details__info">
+            <div class="movie-details__section">
+              <h3>Year</h3>
+              <p class="fs-5">{{ selectedMovie.year }}</p>
+            </div>
+            <div class="movie-details__section">
+              <h3>Rating</h3>
+              <p class="fs-5">{{ selectedMovie.rating }}</p>
+            </div>
+            <div class="movie-details__section">
+              <h3>Plot</h3>
+              <p class="fs-6">{{ selectedMovie.plot }}</p>
+            </div>
           </div>
         </div>
       </div>
+
+      <footer class="modal__footer">
+        <button class="modal__button" (click)="closeDetails()">
+          <i class="fas fa-times me-2"></i>Close
+        </button>
+      </footer>
     </div>
+    <div class="modal__overlay" (click)="closeDetails()"></div>
   </div>
 </div>

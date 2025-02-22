@@ -1,21 +1,68 @@
 <div class="admin-dashboard">
-  <h2>Admin Dashboard</h2>
-  
-  <div class="search-section">
-    <input type="text" [(ngModel)]="searchQuery" placeholder="Search movies...">
-    <button (click)="searchMovies()">Search</button>
-  </div>
+  <header class="admin-dashboard__header">
+    <h1>Movie Management Dashboard</h1>
+  </header>
 
-  <div class="movies-list">
-    <div *ngFor="let movie of movies" class="movie-item">
-      <div class="movie-info">
-        <h3>{{ movie.title }}</h3>
-        <p>{{ movie.description }}</p>
-      </div>
-      <div class="movie-actions">
-        <button (click)="addMovie(movie)">Add to Collection</button>
-        <button (click)="removeMovie(movie.id)" class="remove-btn">Remove</button>
+  <nav class="tabs">
+    <button 
+      class="tabs__button" 
+      [class.tabs__button--active]="activeTab === 'collection'"
+      (click)="setActiveTab('collection')"
+    >
+      Movie Collection
+    </button>
+    <button 
+      class="tabs__button" 
+      [class.tabs__button--active]="activeTab === 'search'"
+      (click)="setActiveTab('search')"
+    >
+      Search Movies
+    </button>
+  </nav>
+
+  <!-- Movie Collection Tab -->
+  <div class="tab-content" *ngIf="activeTab === 'collection'">
+    <!-- Loading Spinner -->
+    <div class="loading-spinner" *ngIf="loading">
+      <div class="loading-spinner__circle"></div>
+    </div>
+
+    <!-- Error Message -->
+    <div class="error-message" *ngIf="error">
+      {{ error }}
+    </div>
+
+    <!-- Movie Grid -->
+    <div class="movie-grid" *ngIf="movies.length > 0">
+      <div class="movie-card" *ngFor="let movie of movies">
+        <div class="movie-card__image">
+          <img [src]="movie.poster" [alt]="movie.title" *ngIf="movie.poster">
+          <div class="movie-card__no-poster" *ngIf="!movie.poster">
+            No Poster Available
+          </div>
+        </div>
+        <div class="movie-card__content">
+          <h3 class="movie-card__title">{{ movie.title }}</h3>
+          <div class="movie-card__info">
+            <span class="movie-card__year">{{ movie.year }}</span>
+            <span class="movie-card__rating" *ngIf="movie.rating">Rating: {{ movie.rating }}</span>
+          </div>
+          <p class="movie-card__plot">{{ movie.plot }}</p>
+          <button class="movie-card__button movie-card__button--danger" (click)="removeMovie(movie.id || '')">
+            Remove Movie
+          </button>
+        </div>
       </div>
     </div>
+
+    <!-- No Movies Message -->
+    <div class="no-content" *ngIf="movies.length === 0 && !loading">
+      <p>No movies in the collection.</p>
+    </div>
+  </div>
+
+  <!-- Search Tab -->
+  <div class="tab-content" *ngIf="activeTab === 'search'">
+    <app-movie-search></app-movie-search>
   </div>
 </div>
