@@ -1,5 +1,6 @@
 package com.exam.movies.controllers;
 
+import com.exam.movies.dtos.MovieRequest;
 import com.exam.movies.models.Movie;
 import com.exam.movies.services.MovieService;
 import org.springframework.http.ResponseEntity;
@@ -26,16 +27,24 @@ public class MovieController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Movie> add(@RequestParam String imdbID) {
-        Optional<Movie> movie = movieService.create(imdbID);
+    public ResponseEntity<Movie> add(@RequestBody MovieRequest movieRequest) {
+        Optional<Movie> movie = movieService.create(movieRequest.getImdbID());
+        return movie.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Movie> remove(@PathVariable Long id) {
+        Optional<Movie> movie = movieService.remove(id);
         return movie.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
 
-    @GetMapping
+    @GetMapping("/")
     @PreAuthorize("isAuthenticated()")
     public List<Movie> getMovies() {
         return movieService.getAll();
